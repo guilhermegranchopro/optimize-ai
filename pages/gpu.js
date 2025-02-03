@@ -7,14 +7,15 @@ const initialGPUs = [
   { id: 2, provider: 'GCP', region: 'us-central1', type: 'NVIDIA V100', price: 1.20, carbon: 180, wf: 20 },
   { id: 3, provider: 'Azure', region: 'eastus', type: 'NVIDIA A100', price: 1.50, carbon: 160, wf: 25 },
   { id: 4, provider: 'IBM Cloud', region: 'us-south', type: 'Tesla V100', price: 1.10, carbon: 190, wf: 18 },
-  // Add more GPU options as needed
+  { id: 5, provider: 'Oracle', region: 'us-ashburn', type: 'NVIDIA T4', price: 0.65, carbon: 210, wf: 14 },
+  // Add more GPU options as needed.
 ];
 
 export default function GPUPage() {
   const [gpus] = useState(initialGPUs);
   const [weights, setWeights] = useState({ price: 1, carbon: 1, wf: 1 });
   const [sortedGPUs, setSortedGPUs] = useState([]);
-  // For the custom GPU form, we now only require provider, region, and type.
+  // For the custom GPU form, we only require provider, region, and type.
   const [customGPU, setCustomGPU] = useState({ provider: '', region: '', type: '' });
   const [customResult, setCustomResult] = useState(null);
 
@@ -36,7 +37,6 @@ export default function GPUPage() {
 
   const handleCustomSubmit = (e) => {
     e.preventDefault();
-    // Instead of calculating a composite score, simply store the added GPU details.
     setCustomResult({ ...customGPU });
     setCustomGPU({ provider: '', region: '', type: '' });
   };
@@ -47,7 +47,7 @@ export default function GPUPage() {
 
       <div className={styles.sliderGroup}>
         <label>
-          Price Weight: {weights.price}
+          Cost
           <input 
             type="range" 
             name="price" 
@@ -59,7 +59,7 @@ export default function GPUPage() {
           />
         </label>
         <label>
-          Carbon Intensity Weight: {weights.carbon}
+          Carbon intensity
           <input 
             type="range" 
             name="carbon" 
@@ -71,7 +71,7 @@ export default function GPUPage() {
           />
         </label>
         <label>
-          W/FLOPS Weight: {weights.wf}
+          Hardware efficiency
           <input 
             type="range" 
             name="wf" 
@@ -93,7 +93,6 @@ export default function GPUPage() {
             <th>Price</th>
             <th>Carbon Intensity</th>
             <th>W/FLOPS</th>
-            <th>Score</th>
           </tr>
         </thead>
         <tbody>
@@ -105,7 +104,6 @@ export default function GPUPage() {
               <td>{gpu.price}</td>
               <td>{gpu.carbon}</td>
               <td>{gpu.wf}</td>
-              <td>{gpu.score.toFixed(2)}</td>
             </tr>
           ))}
         </tbody>
