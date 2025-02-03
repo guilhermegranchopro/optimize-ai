@@ -1,9 +1,7 @@
-// pages/gpu.js
 import { useState, useEffect } from 'react';
 import styles from '../styles/GPU.module.css';
 
 export default function GPUPage({ initialGPUs }) {
-  // Use the fetched data as initial state
   const [gpus] = useState(initialGPUs);
   const [weights, setWeights] = useState({ price: 1, carbon: 1, wf: 1 });
   const [sortedGPUs, setSortedGPUs] = useState([]);
@@ -11,15 +9,16 @@ export default function GPUPage({ initialGPUs }) {
   const [customResult, setCustomResult] = useState(null);
 
   useEffect(() => {
+    const multiplier = 2; // Increase slider effect multiplier
     const scored = gpus.map(gpu => {
-      const score = 
-        (parseFloat(gpu.price) * weights.price) +
-        (parseFloat(gpu.carbon) * weights.carbon) +
-        (parseFloat(gpu.wf) * weights.wf);
+      const score =
+        (parseFloat(gpu.price) * (weights.price * multiplier)) +
+        (parseFloat(gpu.carbon) * (weights.carbon * multiplier)) +
+        (parseFloat(gpu.wf) * (weights.wf * multiplier));
       return { ...gpu, score };
     });
     scored.sort((a, b) => a.score - b.score);
-    setSortedGPUs(scored.slice(0, 10));
+    setSortedGPUs(scored.slice(0, 5)); // Display top 5 GPUs
   }, [weights, gpus]);
 
   const handleSliderChange = (e) => {
@@ -34,45 +33,51 @@ export default function GPUPage({ initialGPUs }) {
 
   return (
     <div className={styles.pageContainer}>
-      <h1>Choose the best GPU for your metrics.</h1>
+      <h1 className={styles.mainTitle}>Choose the Best GPU for Your Metrics</h1>
 
       <div className={styles.sliderGroup}>
-        <label>
-          <span>Cost</span>
+        <div className={styles.sliderContainer}>
+          <label htmlFor="price" className={styles.sliderLabel}>Cost</label>
           <input 
             type="range" 
+            id="price"
             name="price" 
             min="0" 
             max="5" 
             step="0.1" 
             value={weights.price} 
             onChange={handleSliderChange} 
+            className={styles.slider}
           />
-        </label>
-        <label>
-          <span>Carbon intensity</span>
+        </div>
+        <div className={styles.sliderContainer}>
+          <label htmlFor="carbon" className={styles.sliderLabel}>Carbon Intensity</label>
           <input 
             type="range" 
+            id="carbon"
             name="carbon" 
             min="0" 
             max="5" 
             step="0.1" 
             value={weights.carbon} 
             onChange={handleSliderChange} 
+            className={styles.slider}
           />
-        </label>
-        <label>
-          <span>Hardware efficiency</span>
+        </div>
+        <div className={styles.sliderContainer}>
+          <label htmlFor="wf" className={styles.sliderLabel}>Hardware Efficiency</label>
           <input 
             type="range" 
+            id="wf"
             name="wf" 
             min="0" 
             max="5" 
             step="0.1" 
             value={weights.wf} 
             onChange={handleSliderChange} 
+            className={styles.slider}
           />
-        </label>
+        </div>
       </div>
 
       <table className={styles.gpuTable}>
@@ -84,6 +89,7 @@ export default function GPUPage({ initialGPUs }) {
             <th>Price</th>
             <th>Carbon Intensity</th>
             <th>W/FLOPS</th>
+            <th>Score</th>
           </tr>
         </thead>
         <tbody>
@@ -95,6 +101,7 @@ export default function GPUPage({ initialGPUs }) {
               <td>{gpu.price}</td>
               <td>{gpu.carbon}</td>
               <td>{gpu.wf}</td>
+              <td>{gpu.score}</td>
             </tr>
           ))}
         </tbody>
@@ -139,14 +146,13 @@ export default function GPUPage({ initialGPUs }) {
   );
 }
 
-  export async function getStaticProps() {
-    // Use the environment variable, falling back to 'http://localhost:3000' if not set.
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/gpu-data`);
-    const data = await res.json();
-  
-    return {
-      props: { initialGPUs: data },
-      revalidate: 86400, // revalidate every 24 hours
-    };
-  }
+export async function getStaticProps() {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const res = await fetch(`${baseUrl}/api/gpu-data`);
+  const data = await res.json();
+
+  return {
+    props: { initialGPUs: data },
+    revalidate: 86400, // revalidate every 24 hours
+  };
+}
