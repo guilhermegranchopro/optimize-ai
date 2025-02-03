@@ -2,19 +2,12 @@
 import { useState, useEffect } from 'react';
 import styles from '../styles/GPU.module.css';
 
-const initialGPUs = [
-  { id: 1, provider: 'AWS', region: 'us-east-1', type: 'Tesla T4', price: 0.70, carbon: 200, wf: 15 },
-  { id: 2, provider: 'GCP', region: 'us-central1', type: 'NVIDIA V100', price: 1.20, carbon: 180, wf: 20 },
-  { id: 3, provider: 'Azure', region: 'eastus', type: 'NVIDIA A100', price: 1.50, carbon: 160, wf: 25 },
-  { id: 4, provider: 'IBM Cloud', region: 'us-south', type: 'Tesla V100', price: 1.10, carbon: 190, wf: 18 },
-  // Add more GPU options as needed
-];
-
-export default function GPUPage() {
-  const [gpus, setGPUs] = useState(initialGPUs);
+export default function GPUPage({ initialGPUs }) {
+  // Use the fetched data as initial state
+  const [gpus] = useState(initialGPUs);
   const [weights, setWeights] = useState({ price: 1, carbon: 1, wf: 1 });
   const [sortedGPUs, setSortedGPUs] = useState([]);
-  const [customGPU, setCustomGPU] = useState({ provider: '', region: '', type: '', price: '', carbon: '', wf: '' });
+  const [customGPU, setCustomGPU] = useState({ provider: '', region: '', type: '' });
   const [customResult, setCustomResult] = useState(null);
 
   useEffect(() => {
@@ -35,11 +28,8 @@ export default function GPUPage() {
 
   const handleCustomSubmit = (e) => {
     e.preventDefault();
-    const score = 
-      (parseFloat(customGPU.price || 0) * weights.price) +
-      (parseFloat(customGPU.carbon || 0) * weights.carbon) +
-      (parseFloat(customGPU.wf || 0) * weights.wf);
-    setCustomResult({ ...customGPU, score });
+    setCustomResult({ ...customGPU });
+    setCustomGPU({ provider: '', region: '', type: '' });
   };
 
   return (
@@ -48,7 +38,7 @@ export default function GPUPage() {
 
       <div className={styles.sliderGroup}>
         <label>
-          Price Weight: {weights.price}
+          <span>Cost</span>
           <input 
             type="range" 
             name="price" 
@@ -60,7 +50,7 @@ export default function GPUPage() {
           />
         </label>
         <label>
-          Carbon Intensity Weight: {weights.carbon}
+          <span>Carbon intensity</span>
           <input 
             type="range" 
             name="carbon" 
@@ -72,7 +62,7 @@ export default function GPUPage() {
           />
         </label>
         <label>
-          W/FLOPS Weight: {weights.wf}
+          <span>Hardware efficiency</span>
           <input 
             type="range" 
             name="wf" 
@@ -94,7 +84,6 @@ export default function GPUPage() {
             <th>Price</th>
             <th>Carbon Intensity</th>
             <th>W/FLOPS</th>
-            <th>Score</th>
           </tr>
         </thead>
         <tbody>
@@ -106,7 +95,6 @@ export default function GPUPage() {
               <td>{gpu.price}</td>
               <td>{gpu.carbon}</td>
               <td>{gpu.wf}</td>
-              <td>{gpu.score.toFixed(2)}</td>
             </tr>
           ))}
         </tbody>
@@ -136,37 +124,29 @@ export default function GPUPage() {
             onChange={e => setCustomGPU({ ...customGPU, type: e.target.value })}
             required 
           />
-          <input 
-            type="number" 
-            placeholder="Price" 
-            value={customGPU.price} 
-            onChange={e => setCustomGPU({ ...customGPU, price: e.target.value })}
-            required 
-          />
-          <input 
-            type="number" 
-            placeholder="Carbon Intensity" 
-            value={customGPU.carbon} 
-            onChange={e => setCustomGPU({ ...customGPU, carbon: e.target.value })}
-            required 
-          />
-          <input 
-            type="number" 
-            placeholder="W/FLOPS" 
-            value={customGPU.wf} 
-            onChange={e => setCustomGPU({ ...customGPU, wf: e.target.value })}
-            required 
-          />
-          <button type="submit" className={styles.button}>Evaluate My GPU</button>
+          <button type="submit" className={styles.button}>Add My GPU</button>
         </form>
         {customResult && (
           <div className={styles.customResult}>
-            <h3>Evaluation Result</h3>
-            <p>Composite Score: {customResult.score.toFixed(2)}</p>
-            <p>(Lower is better)</p>
+            <h3>GPU Added for Comparison</h3>
+            <p>Provider: {customResult.provider}</p>
+            <p>Region: {customResult.region}</p>
+            <p>GPU Type: {customResult.type}</p>
           </div>
         )}
       </section>
     </div>
   );
 }
+
+  export async function getStaticProps() {
+    // Use the environment variable, falling back to 'http://localhost:3000' if not set.
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const res = await fetch(`${baseUrl}/api/gpu-data`);
+    const data = await res.json();
+  
+    return {
+      props: { initialGPUs: data },
+      revalidate: 86400, // revalidate every 24 hours
+    };
+  }
