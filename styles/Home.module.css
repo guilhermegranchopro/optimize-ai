@@ -1,0 +1,52 @@
+/* styles/Home.module.css */
+
+.homeContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #28a745, #a8e6cf);
+    text-align: center;
+    color: #fff;
+    padding: 0 2rem;
+  }
+  
+  .hero {
+    max-width: 800px;
+  }
+  
+  .hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+  
+  .hero .quote {
+    font-size: 1.5rem;
+    font-style: italic;
+    margin-bottom: 2rem;
+  }
+  
+  .buttonGroup {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  
+  .button {
+    display: inline-block;
+    padding: 0.8rem 1.2rem;
+    background: #fff;
+    color: #28a745;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  
+  .button:hover {
+    background: #e0f5e9;
+    transform: translateY(-3px);
+  }
+  

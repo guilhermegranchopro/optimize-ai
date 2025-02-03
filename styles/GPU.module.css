@@ -1,0 +1,121 @@
+/* styles/GPU.module.css */
+
+.pageContainer {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .pageContainer h1 {
+    text-align: center;
+    color: #28a745;
+    margin-bottom: 1rem;
+  }
+  
+  /* Sliders */
+  .slider-group label {
+    display: block;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+  }
+  
+  .slider-group input[type="range"] {
+    -webkit-appearance: none;
+    width: 80%;
+    height: 8px;
+    border-radius: 5px;
+    background: #28a745;
+    outline: none;
+    margin-top: 0.5rem;
+  }
+  
+  .slider-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #28a745;
+    cursor: pointer;
+  }
+  
+  .slider-group input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #28a745;
+    cursor: pointer;
+  }
+  
+  /* GPU Table */
+  .gpuTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+  }
+  
+  .gpuTable th, .gpuTable td {
+    border: 1px solid #ddd;
+    padding: 0.8rem;
+    text-align: center;
+  }
+  
+  .gpuTable th {
+    background: #28a745;
+    color: #fff;
+  }
+  
+  /* Custom GPU Form */
+  .customGPU {
+    margin-top: 3rem;
+    text-align: center;
+  }
+  
+  .customGPU h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .customForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .customForm input,
+  .customForm button {
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 90%;
+    max-width: 450px;
+  }
+  
+  .customForm button {
+    background: #28a745;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .customForm button:hover {
+    background: #218838;
+  }
+  
+  .customResult {
+    background: #e9f7ef;
+    padding: 1rem;
+    border-radius: 5px;
+    max-width: 450px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
