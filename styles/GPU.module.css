@@ -13,44 +13,64 @@
   text-align: center;
   color: #28a745;
   margin-bottom: 1rem;
+  margin-top: -10px; /* Move title slightly up */
 }
 
-/* Slider Group: Stack sliders vertically with spacing */
+/* Slider Group: stack sliders vertically and center them */
 .sliderGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 2rem;
 }
+
 .sliderGroup label {
   display: block;
   margin-bottom: 1.5rem;
   font-size: 1.1rem;
+  width: 100%;
+  text-align: center;
 }
 
-/* Style the range inputs with a green track */
+/* Increase slider size: longer and larger */
 .sliderGroup input[type="range"] {
   -webkit-appearance: none;
-  width: 80%;
-  height: 8px;
-  border-radius: 5px;
-  background: #28a745;
+  width: 90%;
+  max-width: 500px;
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #28a745 0%, #a8e6cf 100%);
   outline: none;
   margin-top: 0.5rem;
+  transition: background 0.3s ease;
+}
+.sliderGroup input[type="range"]:focus {
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.8);
 }
 .sliderGroup input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: #fff;
   border: 2px solid #28a745;
   cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.sliderGroup input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
 }
 .sliderGroup input[type="range"]::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: #fff;
   border: 2px solid #28a745;
   cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.sliderGroup input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.1);
 }
 
 /* Table Styling */
