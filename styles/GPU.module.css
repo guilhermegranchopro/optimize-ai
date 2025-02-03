@@ -7,145 +7,167 @@
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center; /* Center all text */
 }
 
+/* Title Styling */
 .pageContainer h1 {
   text-align: center;
-  color: #28a745;
-  margin-bottom: 1rem;
-  margin-top: -10px; /* Move title slightly up */
+  font-size: 2.5rem; /* Larger Title */
+  font-weight: bold;
+  color: #000; /* Black color */
+  margin-bottom: 1.5rem;
 }
 
-/* Slider Group: stack sliders vertically and center them */
+/* Slider Group: Centered & Consistent Size */
 .sliderGroup {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 2rem;
+  gap: 1.5rem;
+  width: 100%;
 }
 
 .sliderGroup label {
+  font-size: 1.3rem; /* Larger labels */
+  font-weight: bold;
   display: block;
-  margin-bottom: 1.5rem;
-  font-size: 1.1rem;
-  width: 100%;
+  width: 600px; /* Consistent width */
   text-align: center;
 }
 
-/* Increase slider size: longer and larger */
+/* Ensure all sliders are the same size */
 .sliderGroup input[type="range"] {
   -webkit-appearance: none;
-  width: 90%;
-  max-width: 500px;
-  height: 12px;
-  border-radius: 6px;
+  width: 600px; /* Fixed width for consistency */
+  height: 16px; /* Thicker track */
+  border-radius: 8px;
   background: linear-gradient(90deg, #28a745 0%, #a8e6cf 100%);
   outline: none;
   margin-top: 0.5rem;
   transition: background 0.3s ease;
 }
+
 .sliderGroup input[type="range"]:focus {
-  box-shadow: 0 0 5px rgba(40, 167, 69, 0.8);
-}
-.sliderGroup input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #fff;
-  border: 2px solid #28a745;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-.sliderGroup input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.1);
-}
-.sliderGroup input[type="range"]::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #fff;
-  border: 2px solid #28a745;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-.sliderGroup input[type="range"]::-moz-range-thumb:hover {
-  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(40, 167, 69, 0.8);
 }
 
-/* Table Styling */
+.sliderGroup input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #28a745;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.sliderGroup input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.sliderGroup input[type="range"]::-moz-range-thumb {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #28a745;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.sliderGroup input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Center Table */
 .gpuTable {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 2rem;
+  margin: 2rem auto;
 }
+
 .gpuTable th, .gpuTable td {
   border: 1px solid #ddd;
-  padding: 0.8rem;
+  padding: 1rem;
   text-align: center;
+  font-size: 1.1rem;
 }
+
 .gpuTable th {
   background: #28a745;
   color: #fff;
+  font-size: 1.3rem;
 }
 
 /* Custom GPU Form */
 .customGPU {
   margin-top: 3rem;
-  text-align: center;
 }
+
 .customGPU h2 {
-  text-align: center;
-  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: bold;
 }
+
 .customForm {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
   margin-bottom: 2rem;
 }
+
 .customForm input,
 .customForm button {
-  padding: 0.8rem 1rem;
-  font-size: 1rem;
+  padding: 1rem;
+  font-size: 1.2rem;
   border: 1px solid #ddd;
-  border-radius: 5px;
-  width: 90%;
-  max-width: 450px;
+  border-radius: 8px;
+  width: 95%;
+  max-width: 500px;
 }
+
 .customForm button {
   background: #28a745;
   color: #fff;
   border: none;
   cursor: pointer;
-  transition: background 0.3s ease;
-}
-.customForm button:hover {
-  background: #218838;
-}
-.customResult {
-  background: #e9f7ef;
-  padding: 1rem;
-  border-radius: 5px;
-  max-width: 450px;
-  margin: 0 auto;
-  text-align: center;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
-/* Reusable button style */
+.customForm button:hover {
+  background: #218838;
+  transform: translateY(-3px);
+}
+
+/* Result Box */
+.customResult {
+  background: #e9f7ef;
+  padding: 1.5rem;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Button Styling */
 .button {
   background: #28a745;
   color: #fff;
-  padding: 0.8rem 1.2rem;
-  border-radius: 5px;
-  font-size: 1.2rem;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1.3rem;
   font-weight: bold;
   text-decoration: none;
   border: none;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.3s ease;
 }
+
 .button:hover {
   background: #218838;
   transform: translateY(-3px);
