@@ -2,20 +2,11 @@
 import { useState, useEffect } from 'react';
 import styles from '../styles/GPU.module.css';
 
-const initialGPUs = [
-  { id: 1, provider: 'AWS', region: 'us-east-1', type: 'Tesla T4', price: 0.70, carbon: 200, wf: 15 },
-  { id: 2, provider: 'GCP', region: 'us-central1', type: 'NVIDIA V100', price: 1.20, carbon: 180, wf: 20 },
-  { id: 3, provider: 'Azure', region: 'eastus', type: 'NVIDIA A100', price: 1.50, carbon: 160, wf: 25 },
-  { id: 4, provider: 'IBM Cloud', region: 'us-south', type: 'Tesla V100', price: 1.10, carbon: 190, wf: 18 },
-  { id: 5, provider: 'Oracle', region: 'us-ashburn', type: 'NVIDIA T4', price: 0.65, carbon: 210, wf: 14 },
-  // Add more GPU options as needed.
-];
-
-export default function GPUPage() {
+export default function GPUPage({ initialGPUs }) {
+  // Use the fetched data as initial state
   const [gpus] = useState(initialGPUs);
   const [weights, setWeights] = useState({ price: 1, carbon: 1, wf: 1 });
   const [sortedGPUs, setSortedGPUs] = useState([]);
-  // For the custom GPU form, we only require provider, region, and type.
   const [customGPU, setCustomGPU] = useState({ provider: '', region: '', type: '' });
   const [customResult, setCustomResult] = useState(null);
 
@@ -47,7 +38,7 @@ export default function GPUPage() {
 
       <div className={styles.sliderGroup}>
         <label>
-          Cost
+          <span>Cost</span>
           <input 
             type="range" 
             name="price" 
@@ -59,7 +50,7 @@ export default function GPUPage() {
           />
         </label>
         <label>
-          Carbon intensity
+          <span>Carbon intensity</span>
           <input 
             type="range" 
             name="carbon" 
@@ -71,7 +62,7 @@ export default function GPUPage() {
           />
         </label>
         <label>
-          Hardware efficiency
+          <span>Hardware efficiency</span>
           <input 
             type="range" 
             name="wf" 
@@ -147,3 +138,15 @@ export default function GPUPage() {
     </div>
   );
 }
+
+  export async function getStaticProps() {
+    // Use the environment variable, falling back to 'http://localhost:3000' if not set.
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const res = await fetch(`${baseUrl}/api/gpu-data`);
+    const data = await res.json();
+  
+    return {
+      props: { initialGPUs: data },
+      revalidate: 86400, // revalidate every 24 hours
+    };
+  }
