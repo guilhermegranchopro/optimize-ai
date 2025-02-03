@@ -11,10 +11,11 @@ const initialGPUs = [
 ];
 
 export default function GPUPage() {
-  const [gpus, setGPUs] = useState(initialGPUs);
+  const [gpus] = useState(initialGPUs);
   const [weights, setWeights] = useState({ price: 1, carbon: 1, wf: 1 });
   const [sortedGPUs, setSortedGPUs] = useState([]);
-  const [customGPU, setCustomGPU] = useState({ provider: '', region: '', type: '', price: '', carbon: '', wf: '' });
+  // For the custom GPU form, we now only require provider, region, and type.
+  const [customGPU, setCustomGPU] = useState({ provider: '', region: '', type: '' });
   const [customResult, setCustomResult] = useState(null);
 
   useEffect(() => {
@@ -35,11 +36,9 @@ export default function GPUPage() {
 
   const handleCustomSubmit = (e) => {
     e.preventDefault();
-    const score = 
-      (parseFloat(customGPU.price || 0) * weights.price) +
-      (parseFloat(customGPU.carbon || 0) * weights.carbon) +
-      (parseFloat(customGPU.wf || 0) * weights.wf);
-    setCustomResult({ ...customGPU, score });
+    // Instead of calculating a composite score, simply store the added GPU details.
+    setCustomResult({ ...customGPU });
+    setCustomGPU({ provider: '', region: '', type: '' });
   };
 
   return (
@@ -136,34 +135,14 @@ export default function GPUPage() {
             onChange={e => setCustomGPU({ ...customGPU, type: e.target.value })}
             required 
           />
-          <input 
-            type="number" 
-            placeholder="Price" 
-            value={customGPU.price} 
-            onChange={e => setCustomGPU({ ...customGPU, price: e.target.value })}
-            required 
-          />
-          <input 
-            type="number" 
-            placeholder="Carbon Intensity" 
-            value={customGPU.carbon} 
-            onChange={e => setCustomGPU({ ...customGPU, carbon: e.target.value })}
-            required 
-          />
-          <input 
-            type="number" 
-            placeholder="W/FLOPS" 
-            value={customGPU.wf} 
-            onChange={e => setCustomGPU({ ...customGPU, wf: e.target.value })}
-            required 
-          />
-          <button type="submit" className={styles.button}>Evaluate My GPU</button>
+          <button type="submit" className={styles.button}>Add My GPU</button>
         </form>
         {customResult && (
           <div className={styles.customResult}>
-            <h3>Evaluation Result</h3>
-            <p>Composite Score: {customResult.score.toFixed(2)}</p>
-            <p>(Lower is better)</p>
+            <h3>GPU Added for Comparison</h3>
+            <p>Provider: {customResult.provider}</p>
+            <p>Region: {customResult.region}</p>
+            <p>GPU Type: {customResult.type}</p>
           </div>
         )}
       </section>
