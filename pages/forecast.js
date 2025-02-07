@@ -39,8 +39,34 @@ const Forecast = () => {
   const [hoveredMetric, setHoveredMetric] = useState(null)
   const gradientRef = useRef(null)
   const pageRef = useRef(null)
+  const [carbonIntensityPrediction, setCarbonIntensityPrediction] = useState(null)
+  const [predictionError, setPredictionError] = useState(null)
 
   const { data, error, updateInterval } = useElectricityData()
+
+  const keyframes = `
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+`
+
+  useEffect(() => {
+    const style = document.createElement("style")
+    style.appendChild(document.createTextNode(keyframes))
+    document.head.appendChild(style)
+
+    return () => {
+      document.head.removeChild(style)
+    }
+  }, [])
 
   useEffect(() => {
     const handleMouseMove = (event) => {
@@ -64,6 +90,35 @@ const Forecast = () => {
     return () => {
       document.removeEventListener("mousemove", handleMouseMove)
     }
+  }, [])
+
+  useEffect(() => {
+    async function fetchCarbonIntensityPrediction() {
+      try {
+        console.log("Fetching carbon intensity prediction...")
+        const response = await fetch("/api/carbon-intensity-forecast")
+        console.log("Response status:", response.status)
+        const data = await response.json()
+        console.log("Response data:", data)
+
+        if (!response.ok) {
+          throw new Error(data.error || `HTTP error! status: ${response.status}`)
+        }
+
+        if (data.error) {
+          throw new Error(data.error)
+        }
+
+        setCarbonIntensityPrediction(data.prediction)
+        setPredictionError(null)
+      } catch (error) {
+        console.error("Error fetching carbon intensity prediction:", error)
+        setPredictionError(error.message || "An unknown error occurred")
+        setCarbonIntensityPrediction(null)
+      }
+    }
+
+    fetchCarbonIntensityPrediction()
   }, [])
 
   const handleIntervalChange = (metric, interval) => {
@@ -333,7 +388,10 @@ const Forecast = () => {
                     style={{
                       "--mouse-x": 0.5,
                       "--mouse-y": 0.5,
-                      backgroundColor: getBackgroundColor(3, false),
+                      backgroundColor: getBackgroundColor(
+                        carbonIntensityPrediction !== null ? carbonIntensityPrediction : 3,
+                        false,
+                      ),
                     }}
                   >
                     <div
@@ -345,7 +403,14 @@ const Forecast = () => {
                       }}
                     />
                     <h3 className="text-2xl font-semibold text-white mb-4 relative z-10">Carbon Intensity Lifecycle</h3>
-                    <p className="text-5xl font-bold text-white mb-2 relative z-10">3</p>
+                    <p className="text-5xl font-bold text-white mb-2 relative z-10">
+                      {predictionError
+                        ? "Error"
+                        : carbonIntensityPrediction !== null
+                          ? carbonIntensityPrediction
+                          : "Loading..."}
+                    </p>
+                    {predictionError && <p className="text-red-500 mt-2 relative z-10">Error: {predictionError}</p>}
                   </AnimatedDiv>
                   <AnimatedDiv
                     initial={motion ? { opacity: 0, scale: 0.9 } : {}}
@@ -380,23 +445,5 @@ const Forecast = () => {
     </div>
   )
 }
-
-const keyframes = `
-  @keyframes gradient {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-`
-
-const style = document.createElement("style")
-style.appendChild(document.createTextNode(keyframes))
-document.head.appendChild(style)
 
 export default Forecast
